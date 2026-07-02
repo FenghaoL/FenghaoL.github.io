@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://FenghaoL.github.io/sitemap.xml
