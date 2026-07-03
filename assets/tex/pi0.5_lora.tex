@@ -1,0 +1,137 @@
+\documentclass[10pt]{article}
+
+\usepackage[margin=0.65in]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{makecell}
+\usepackage{multirow}
+
+\captionsetup{font=small,labelfont=bf}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{4.5pt}
+
+\newcommand{\best}[1]{\textbf{#1}}
+\newcommand{\cellzero}{\cellcolor{red!10}0}
+\newcommand{\cellone}{\cellcolor{orange!15}1}
+\newcommand{\celltwo}{\cellcolor{yellow!25}2}
+\newcommand{\cellthree}{\cellcolor{green!18}\textbf{3}}
+
+\begin{document}
+
+\begin{center}
+{\Large $\pi_{0.5}$ LIBERO-Spatial LoRA Ablation}\\
+\vspace{0.35em}
+{\small 4$\times$ A100 40GB, batch size 64, checkpoint step 5999, 3 trials/task, 10 tasks, 30 eval episodes}
+\end{center}
+
+% \begin{figure}[h]
+% \centering
+% \fbox{
+%   \begin{minipage}[c][0.28\textheight][c]{0.88\linewidth}
+%   \centering
+%   \vspace{1em}
+%   \Large WandB training loss screenshot placeholder\\
+%   \vspace{0.6em}
+%   \small Replace this box with loss curves for B/C/D/E.
+%   \end{minipage}
+% }
+% \caption{Training loss curves.}
+% \label{fig:loss-placeholder}
+% \end{figure}
+
+\begin{table}[h]
+\centering
+\caption{LoRA configuration.}
+\label{tab:lora-config}
+\begin{tabular}{l l r r r r r r r r r}
+\toprule
+Part & Variant & Width & Depth & MLP & Heads & KV & Head dim & Rank $r$ & $\alpha$ & $s=\alpha/r$ \\
+\midrule
+PaliGemma LLM & \texttt{gemma\_2b\_lora} & 2048 & 18 & 16384 & 8 & 1 & 256 & 16 & 16 & 1.0 \\
+Action expert & \texttt{gemma\_300m\_lora} & 1024 & 18 & 4096 & 8 & 1 & 256 & 32 & 32 & 1.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{LoRA insertion points in each Gemma transformer block.}
+\label{tab:lora-sites}
+\begin{tabular}{l l}
+\toprule
+Block & LoRA-injected parameters \\
+\midrule
+Attention & \texttt{q\_einsum}, \texttt{kv\_einsum}, \texttt{attn\_vec\_einsum} \\
+Feed-forward & \texttt{gating\_einsum}, \texttt{linear} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{align}
+y &= xW + s\,xAB, \qquad s=\frac{\alpha}{r}, \\
+A &\in \mathbb{R}^{d_{\mathrm{in}}\times r}, \qquad
+B \in \mathbb{R}^{r\times d_{\mathrm{out}}}, \qquad
+r \ll \min(d_{\mathrm{in}},d_{\mathrm{out}}).
+\end{align}
+
+\begin{table}[h]
+\centering
+\caption{Experiment summary. Final loss is the last printed loss at step 5900.}
+\label{tab:experiment-summary}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{c l r r l r r r r}
+\toprule
+ID & Config & Trainable & \% & Trainable modules & Time & Loss & Success & Ckpt \\
+\midrule
+A & \texttt{pi05\_libero} & $\sim$3.40B & 100.00 & Full model & $\sim$3.1h final / $\sim$3.35h incl. probe & \best{0.0222} & \best{29/30 = 96.7\%} & 42G \\
+B & \texttt{pi05\_libero\_lora\_hybrid} & 466.96M & 13.72 & \makecell[l]{LLM LoRA + action expert LoRA\\+ non-LLM full params} & 2h55m & 0.0230 & 25/30 = 83.3\% & 9.0G \\
+C & \texttt{pi05\_libero\_lora\_pure\_both} & 49.99M & 1.47 & PaliGemma LoRA + action expert LoRA & 2h25m & 0.0265 & 14/30 = 46.7\% & 5.4G \\
+D & \texttt{pi05\_libero\_lora\_pure\_action} & 22.12M & 0.65 & Action expert LoRA & $\sim$2h10m & 0.0326 & 4/30 = 13.3\% & 5.1G \\
+E & \texttt{pi05\_libero\_lora\_pure\_pg} & 27.87M & 0.82 & PaliGemma LoRA & $\sim$2h22m & 0.0283 & 13/30 = 43.3\% & 5.2G \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+% \begin{table}[h]
+% \centering
+% \caption{Per-task successes out of 3 trials.}
+% \label{tab:per-task}
+% \begin{tabular}{c c c c c c}
+% \toprule
+% Task ID & A Full & B Hybrid & C Pure Both & D Action & E PaliGemma \\
+% \midrule
+% 0 & \cellthree & \cellthree & \celltwo & \cellzero & \cellthree \\
+% 1 & \cellthree & \celltwo & \cellzero & \cellzero & \cellzero \\
+% 2 & \cellthree & \cellthree & \celltwo & \cellzero & \cellthree \\
+% 3 & \cellthree & \cellthree & \cellone & \cellzero & \celltwo \\
+% 4 & \celltwo & \cellone & \cellzero & \cellzero & \celltwo \\
+% 5 & \cellthree & \cellone & \cellone & \celltwo & \cellone \\
+% 6 & \cellthree & \cellthree & \celltwo & \cellone & \celltwo \\
+% 7 & \cellthree & \cellthree & \cellthree & \cellzero & \cellzero \\
+% 8 & \cellthree & \cellthree & \cellthree & \cellone & \cellzero \\
+% 9 & \cellthree & \cellthree & \cellzero & \cellzero & \cellzero \\
+% \bottomrule
+% \end{tabular}
+% \end{table}
+
+\begin{table}[h]
+\centering
+\caption{Compact ranking.}
+\label{tab:ranking}
+\begin{tabular}{c c c c c}
+\toprule
+Rank & 1 & 2 & 3--4 & 5 \\
+\midrule
+Model & A Full & B Hybrid & C Pure Both $\approx$ E PaliGemma & D Action \\
+Success & 96.7\% & 83.3\% & 46.7\% $\approx$ 43.3\% & 13.3\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}
