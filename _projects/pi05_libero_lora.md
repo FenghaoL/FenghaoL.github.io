@@ -1,6 +1,6 @@
 ---
 layout: page
-title: pi0.5 Tuning Strategies on LIBERO
+title: pi0.5 LoRA Ablations on LIBERO
 description: Full fine-tuning and LoRA ablations for pi0.5 on LIBERO-Spatial.
 img: assets/img/projects/pi05-cover.jpg
 importance: 2
@@ -41,31 +41,28 @@ permalink: /projects/pi05-libero-lora/
     display: block;
   }
 
+  .hero-video {
+    width: min(50%, 520px);
+    margin: 0 auto 1.3rem;
+  }
+
+  .structure-img {
+    width: min(100%, 920px);
+    margin: 1rem auto 1.4rem;
+    background: transparent;
+  }
+
+  .ablation-chart {
+    width: min(60%, 760px);
+    margin: 1rem auto 1.4rem;
+  }
+
   .video-caption {
     margin-top: 0.35rem;
     color: var(--global-text-color-light);
     font-size: 0.88rem;
     line-height: 1.35;
     text-align: center;
-  }
-
-  .arch-diagram {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 0.65rem;
-    margin: 1rem 0 1.4rem;
-  }
-
-  .arch-diagram div {
-    border: 1px solid var(--global-divider-color);
-    border-radius: 8px;
-    padding: 0.85rem;
-    text-align: center;
-  }
-
-  .arch-diagram strong {
-    display: block;
-    margin-bottom: 0.3rem;
   }
 
   .compact-table {
@@ -80,20 +77,22 @@ permalink: /projects/pi05-libero-lora/
     padding: 0.45rem 0.35rem;
     vertical-align: top;
   }
+
+  @media (max-width: 640px) {
+    .hero-video,
+    .ablation-chart {
+      width: 100%;
+    }
+  }
 </style>
 
-<video class="wide-video" autoplay loop muted playsinline preload="metadata" poster="{{ '/assets/img/projects/pi05-cover.jpg' | relative_url }}">
+<video class="wide-video hero-video" autoplay loop muted playsinline preload="metadata" poster="{{ '/assets/img/projects/pi05-cover.jpg' | relative_url }}">
   <source src="{{ '/assets/video/pi0.5_lora_full_compare/B_lora_hybrid_5999_libero_spatial_3trials_20260603_200135/rollout_pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate_success.mp4' | relative_url }}" type="video/mp4">
 </video>
 
-pi0.5 is a flow-matching VLA policy that generates continuous robot actions through an action expert conditioned on visual and language features. I reproduced the LIBERO-Spatial fine-tuning pipeline and compared which parts of the model should be adapted.
+[pi0.5](https://github.com/Physical-Intelligence/openpi) is a flow-matching VLA policy that generates continuous robot actions through an action expert conditioned on visual and language features. I reproduced the LIBERO-Spatial fine-tuning pipeline and compared which parts of the model should be adapted.
 
-<div class="arch-diagram">
-  <div><strong>Images</strong>SigLIP visual encoder</div>
-  <div><strong>Language</strong>PaliGemma VLM backbone</div>
-  <div><strong>Policy</strong>Action expert</div>
-  <div><strong>Output</strong>Flow-matched action chunks</div>
-</div>
+<img class="project-img structure-img" src="{{ '/assets/img/projects/pi0.5_structure.png' | relative_url }}" alt="pi0.5 architecture with PaliGemma, SigLIP, and action expert modules">
 
 ## Ablation Setup
 
@@ -117,7 +116,7 @@ All variants were trained on 4 x A100 40GB, evaluated at checkpoint step 5999 wi
   </tbody>
 </table>
 
-<img class="project-img" src="{{ '/assets/img/projects/pi05-libero-ablation.png' | relative_url }}" alt="LIBERO-Spatial success rate ablation chart">
+<img class="project-img ablation-chart" src="{{ '/assets/img/projects/pi05-libero-ablation.png' | relative_url }}" alt="LIBERO-Spatial success rate ablation chart">
 
 <div class="media-grid two">
   <img class="project-img" src="{{ '/assets/img/Wandb_pi0.5_lora.png' | relative_url }}" alt="WandB training loss curves for pi0.5 LoRA ablations">

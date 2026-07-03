@@ -6,11 +6,11 @@ subtitle: Robotics graduate student at the University of Michigan.
 
 profile:
   align: right
-  image: prof_pic.jpg
+  image: AlbertLiu.jpg
   image_circular: false
   more_info: >
     <p>Ann Arbor, MI</p>
-    <p>University of Michigan</p>
+    <p><a href="https://umich.edu/">University of Michigan</a></p>
     <p><a href="/assets/pdf/FenghaoLiu_CV.pdf">CV PDF</a></p>
 
 selected_papers: false
@@ -27,10 +27,12 @@ latest_posts:
   limit: 3
 ---
 
+I completed my undergraduate studies at [Southeast University](https://www.seu.edu.cn/english/) and am now a robotics graduate student at the [University of Michigan](https://umich.edu/).
+
 I work on robot learning systems that connect large vision-language-action models with real robot data, post-training, and deployment. My recent work centers on SO101 manipulation: collecting teleoperated and autonomous rollouts, adapting VLA action spaces, and improving real-world policy behavior through SFT and offline preference optimization.
 
 I am especially interested in practical embodied AI: data pipelines, action representations, policy evaluation, and the engineering details that make robot demos reproducible rather than lucky. I also have research experience in neural rendering and 3D reconstruction from sparse sonar data.
 
-The projects below highlight two recent VLA experiments: real-world G0.5 alignment on SO101, and a pi0.5 LIBERO-Spatial fine-tuning ablation.
+The projects below highlight two recent VLA experiments: real-world [G0.5](https://github.com/OpenGalaxea/GalaxeaVLA) SFT/RL alignment on SO101, and [pi0.5](https://github.com/Physical-Intelligence/openpi) LoRA ablations on LIBERO-Spatial.
 
 [View projects](/projects/)
