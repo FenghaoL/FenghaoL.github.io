@@ -11,7 +11,7 @@ profile:
   more_info: >
     <p>Ann Arbor, MI</p>
     <p>University of Michigan</p>
-    <p><a href="/assets/pdf/刘丰豪简历.pdf">CV PDF</a></p>
+    <p><a href="/assets/pdf/FenghaoLiu_CV.pdf">CV PDF</a></p>
 
 selected_papers: false
 social: false
