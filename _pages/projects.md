@@ -3,7 +3,7 @@ layout: page
 title: projects
 permalink: /projects/
 description: Selected robot learning work.
-nav: true
+nav: false
 nav_order: 2
 ---
 
