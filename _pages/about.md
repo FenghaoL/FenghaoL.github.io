@@ -83,6 +83,8 @@ I work on robot learning systems that connect large vision-language-action model
 
 I am especially interested in practical embodied AI: data pipelines, action representations, policy evaluation, and the engineering details that make robot demos reproducible rather than lucky. I also have research experience in neural rendering and 3D reconstruction from sparse sonar data.
 
+A concise summary of my experience is available in my [CV](/assets/pdf/FenghaoLiu_CV.pdf).
+
 <h2 class="home-section-title">Selected Projects</h2>
 
 <div class="home-projects">

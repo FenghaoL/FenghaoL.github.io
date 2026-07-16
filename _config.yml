@@ -246,7 +246,7 @@ exclude:
   - _posts/
   - _teachings/
   - _bibliography/
-  - assets/pdf/
+  - assets/pdf/example_pdf.pdf
   - purgecss.config.js
   - README.md
   - readme_preview/
